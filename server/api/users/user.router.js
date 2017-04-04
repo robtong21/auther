@@ -25,13 +25,15 @@ router.get('/', function (req, res, next) {
   .catch(next);
 });
 
-router.post('/', function (req, res, next) {
+router.post('/', function(req, res, next){
   User.create(req.body)
-  .then(function (user) {
-    res.status(201).json(user);
+  .then(function(user) {
+    res.status(201).json(user)
   })
-  .catch(next);
-});
+  .catch(next)
+})
+
+
 
 router.get('/:id', function (req, res, next) {
   req.requestedUser.reload(User.options.scopes.populated())
