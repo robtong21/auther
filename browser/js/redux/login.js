@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { adminLogin } from './admin'
 
 //actions
 const SET_CURRENT_USER = 'SET_CURRENT_USER';
@@ -21,11 +22,13 @@ export default function reducer (currentUser = '', action) {
 export const getUser = (email, password) => dispatch => {
     axios.post('/api/login', {email, password})
         .then(res => {
-            console.log(res);
+            console.log('res', res);
             // res.send()
             // console.log("hello", res)
             // console.log(res)
+            console.log('ad', res.data.isAdmin)
             dispatch(logged(res.data.id))
+            adminLogin(res.data.isAdmin)
         })
         .catch(err => console.error('oh noes,', err))
 }

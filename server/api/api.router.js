@@ -20,6 +20,7 @@ router.post('/login', function (req, res, next) {
     } else {
       console.log(req.session)
       req.session.userId = user.id
+      req.session.isAdmin = user.isAdmin
       res.status(200).json(user);
     }
   })

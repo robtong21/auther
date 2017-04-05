@@ -29,6 +29,7 @@ class StoryDetail extends React.Component {
   }
 
   render() {
+    console.log('props', this.props)
     const {users} = this.props;
     const story = this.state.story;
     if (!story) return <div />; // the story id is invalid or the data isnt loaded yet
@@ -37,6 +38,7 @@ class StoryDetail extends React.Component {
         <ul className="list-inline large-font">
           <li>
             <input
+              disabled="true"
               className="form-like large-font"
               value={story.title}
               onChange={evt => this.onStoryUpdate({ title: evt.target.value })}
@@ -45,6 +47,7 @@ class StoryDetail extends React.Component {
           <li><span className="muted">by</span></li>
           <li>
             <select
+              disabled="true"
               value={story.author_id}
               onChange={evt => this.onStoryUpdate({ author_id: evt.target.value })}>
             {
@@ -57,6 +60,7 @@ class StoryDetail extends React.Component {
         </ul>
         <br />
         <ContentEditable
+          disabled={this.props.login === ""}
           placeholder="(text here)"
           html={this.renderRawHTML()}
           onChange={evt => this.onStoryUpdate({ paragraphs: evt.target.value })}
@@ -94,9 +98,9 @@ class StoryDetail extends React.Component {
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapState = ({ users, stories }, ownProps) => {
+const mapState = ({ users, stories, login, admin }, ownProps) => {
   const story = stories.find(aStory => aStory.id === +ownProps.params.id);
-  return { story, users };
+  return { story, users, login, admin };
 };
 
 const mapDispatch = (dispatch) => {
