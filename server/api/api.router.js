@@ -26,4 +26,20 @@ router.post('/login', function (req, res, next) {
   .catch(next);
 });
 
+router.post('/signup', function (req, res, next) {
+  User.create({
+      email: req.body.email,
+      password: req.body.password
+    }) 
+  .then(function (user) {
+      res.status(200).json(user);
+  })
+  .catch(next);
+});
+
+router.post('/logout', function (req, res, next) {
+    req.session.destroy();
+    res.status(200);
+});
+
 module.exports = router;

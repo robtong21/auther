@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import { newUser } from '../redux/login'
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -8,6 +9,12 @@ class Signup extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state= {
+      email: '',
+      password: ''
+    }
+    this.changeEmail = this.changeEmail.bind(this);
+    this.changePassword = this.changePassword.bind(this);
     this.onSignupSubmit = this.onSignupSubmit.bind(this);
   }
 
@@ -24,6 +31,7 @@ class Signup extends React.Component {
                 type="email"
                 className="form-control"
                 required
+                onChange = {this.changeEmail}
               />
             </div>
             <div className="form-group">
@@ -33,6 +41,7 @@ class Signup extends React.Component {
                 type="password"
                 className="form-control"
                 required
+                onChange = {this.changePassword}
               />
             </div>
             <button type="submit" className="btn btn-block btn-primary">{message}</button>
@@ -59,15 +68,31 @@ class Signup extends React.Component {
   }
 
   onSignupSubmit(event) {
-    const { message } = this.props;
     event.preventDefault();
-    console.log(`${message} isn't implemented yet`);
+    this.props.signup(this.state.email, this.state.password)
   }
+
+  changeEmail(event) {
+    const newEmail = event.target.value;
+    this.setState({email: newEmail})
+  }
+
+  changePassword(event) {
+    const newPassword = event.target.value;
+    this.setState({password: newPassword})
+  }
+
 }
 
 /* -----------------    CONTAINER     ------------------ */
 
 const mapState = () => ({ message: 'Sign up' });
-const mapDispatch = null;
+const mapDispatch = dispatch => {
+  return {
+    signup: (email, password) => {
+      dispatch(newUser(email, password))
+    }
+  }
+ };
 
 export default connect(mapState, mapDispatch)(Signup);

@@ -18,8 +18,32 @@ export default function reducer (currentUser = '', action) {
 }
 
 //dispatchers
-export const newUser = (email, password) => dispatch => {
+export const getUser = (email, password) => dispatch => {
     axios.post('/api/login', {email, password})
-        .then(res => res.send()) //dispatch(logged(res.data.id)))
+        .then(res => {
+            console.log(res);
+            // res.send()
+            // console.log("hello", res)
+            // console.log(res)
+            dispatch(logged(res.data.id))
+        })
+        .catch(err => console.error('oh noes,', err))
+}
+
+export const newUser = (email, password) => dispatch => {
+    axios.post('/api/signup', {email, password})
+        .then(res => {
+            console.log(res);
+            dispatch(getUser(email, password))
+        })
+        .catch(err => console.error('oh noes,', err))
+}
+
+export const logout = () => dispatch => {
+    axios.post('/api/logout', {})
+        .then(res => {
+            console.log('logout res', res);
+            dispatch(logged(''))
+        })
         .catch(err => console.error('oh noes,', err))
 }

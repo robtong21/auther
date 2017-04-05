@@ -1,15 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import { getUser } from '../redux/login'
 
 /* -----------------    COMPONENT     ------------------ */
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
+    this.state= {
+      email: '',
+      password: ''
+    }
     this.onLoginSubmit = this.onLoginSubmit.bind(this);
+    this.changeEmail = this.changeEmail.bind(this);
+    this.changePassword = this.changePassword.bind(this);
+
   }
 
+  
   render() {
     const { message } = this.props;
     return (
@@ -23,6 +32,7 @@ class Login extends React.Component {
                 type="email"
                 className="form-control"
                 required
+                onChange={this.changeEmail}
               />
             </div>
             <div className="form-group">
@@ -32,6 +42,7 @@ class Login extends React.Component {
                   type="password"
                   className="form-control"
                   required
+                  onChange={this.changePassword}
                 />
             </div>
             <button type="submit" className="btn btn-block btn-primary">{message}</button>
@@ -58,15 +69,31 @@ class Login extends React.Component {
   }
 
   onLoginSubmit(event) {
-    const { message } = this.props;
     event.preventDefault();
-    console.log(`${message} isn't implemented yet`);
+    this.props.verify(this.state.email, this.state.password)
   }
+
+  changeEmail(event) {
+    const newEmail = event.target.value;
+    this.setState({email: newEmail})
+  }
+
+  changePassword(event) {
+    const newPassword = event.target.value;
+    this.setState({password: newPassword})
+  }
+
 }
 
 /* -----------------    CONTAINER     ------------------ */
 
 const mapState = () => ({ message: 'Log in' });
-const mapDispatch = null;
+const mapDispatch = dispatch => {
+  return {
+    verify: (email, password) => {
+      dispatch(getUser(email, password))
+    }
+  }
+ };
 
 export default connect(mapState, mapDispatch)(Login);
