@@ -38,7 +38,7 @@ class StoryDetail extends React.Component {
         <ul className="list-inline large-font">
           <li>
             <input
-              disabled="true"
+              disabled={!this.props.admin}
               className="form-like large-font"
               value={story.title}
               onChange={evt => this.onStoryUpdate({ title: evt.target.value })}
@@ -47,7 +47,7 @@ class StoryDetail extends React.Component {
           <li><span className="muted">by</span></li>
           <li>
             <select
-              disabled="true"
+              disabled={!this.props.admin}
               value={story.author_id}
               onChange={evt => this.onStoryUpdate({ author_id: evt.target.value })}>
             {

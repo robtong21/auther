@@ -8,19 +8,16 @@ const ADMIN_LOGGED_IN = 'ADMIN_LOGGED_IN'
 const adminLogged = bool => ({type: ADMIN_LOGGED_IN, bool})
 
 //reducer
-export default function reducer (isAdmin = false, action) {
+export default function reducer (adminStatus = false, action) {
     switch (action.type) {
         case ADMIN_LOGGED_IN:
-        console.log('admin logged in is running')
             return action.bool
         
-        default:
-        console.log('but default is running')
-        return isAdmin
+        default: return adminStatus
     }
 }
 
 //dispatchers
-export const adminLogin = (bool) => dispatch => {
-    dispatch(adminLogged(bool))
+export const adminLogin = (isAdmin) => dispatch => {
+    dispatch(adminLogged(isAdmin))
 }

@@ -13,7 +13,7 @@ export default function reducer (currentUser = '', action) {
     switch (action.type) {
         case SET_CURRENT_USER:
             return action.userId
-        
+
         default: return currentUser
     }
 }
@@ -22,13 +22,9 @@ export default function reducer (currentUser = '', action) {
 export const getUser = (email, password) => dispatch => {
     axios.post('/api/login', {email, password})
         .then(res => {
-            console.log('res', res);
-            // res.send()
-            // console.log("hello", res)
-            // console.log(res)
-            console.log('ad', res.data.isAdmin)
+            // console.log('res', res);
             dispatch(logged(res.data.id))
-            adminLogin(res.data.isAdmin)
+            dispatch(adminLogin(res.data.isAdmin))
         })
         .catch(err => console.error('oh noes,', err))
 }
@@ -36,7 +32,6 @@ export const getUser = (email, password) => dispatch => {
 export const newUser = (email, password) => dispatch => {
     axios.post('/api/signup', {email, password})
         .then(res => {
-            console.log(res);
             dispatch(getUser(email, password))
         })
         .catch(err => console.error('oh noes,', err))
@@ -45,8 +40,27 @@ export const newUser = (email, password) => dispatch => {
 export const logout = () => dispatch => {
     axios.post('/api/logout', {})
         .then(res => {
-            console.log('logout res', res);
             dispatch(logged(''))
+        })
+        .catch(err => console.error('oh noes,', err))
+}
+
+export const fetchCurrentUser = () => dispatch => {
+    axios.get('/api/auth/me')
+        .then(res => {
+            console.log('fetch res', res)
+            if (res.data.passport) {
+                dispatch(logged(res.data.passport.user[0]))
+                dispatch(adminLogin(res.data.passport.user[1]))
+            }
+            else {
+                if (res.data.userId) {
+                    dispatch(logged(res.data.userId))
+                }
+                if (res.data.isAdmin) {
+                    dispatch(adminLogin(res.data.isAdmin))
+                }
+            }
         })
         .catch(err => console.error('oh noes,', err))
 }

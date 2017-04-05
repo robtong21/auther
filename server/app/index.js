@@ -3,6 +3,7 @@
 var app = require('express')();
 var session = require('express-session')
 var path = require('path');
+var passport = require('passport')
 
 // "Enhancing" middleware (does not send response, server-side effects only)
 
@@ -16,9 +17,13 @@ app.use(session({
   saveUninitialized: false
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // place right after the session setup middleware
 app.use(function (req, res, next) {
   console.log('session', req.session);
+  console.log('log', req.login)
   next();
 });
 
